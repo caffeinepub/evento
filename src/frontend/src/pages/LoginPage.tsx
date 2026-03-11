@@ -73,7 +73,7 @@ export function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="jane@example.com"
+                  placeholder="djeet5881@gmail.com"
                   autoComplete="email"
                   data-ocid="login.email_input"
                 />

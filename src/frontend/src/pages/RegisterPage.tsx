@@ -115,7 +115,7 @@ export function RegisterPage() {
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Jane Smith"
+                  placeholder="Jeet Sushil Das"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={isPending}
@@ -140,7 +140,7 @@ export function RegisterPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="jane@example.com"
+                  placeholder="djeet5881@gmail.com"
                   disabled={isPending}
                   autoComplete="email"
                   data-ocid="register.email_input"
