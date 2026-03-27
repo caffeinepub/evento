@@ -89,6 +89,12 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface Attendee {
+    id: bigint;
+    eventId: bigint;
+    name: string;
+    email: string;
+}
 export interface UserProfile {
     name: string;
 }
@@ -106,15 +112,18 @@ export enum UserRole {
 }
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    addAttendee(eventId: bigint, name: string, email: string): Promise<bigint>;
     addEvent(title: string, date: string, location: string): Promise<bigint>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     deleteEvent(id: bigint): Promise<void>;
     getAllEvents(): Promise<Array<Event>>;
+    getAttendees(eventId: bigint): Promise<Array<Attendee>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getEventsByCurrentUser(): Promise<Array<Event>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
+    removeAttendee(attendeeId: bigint): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
 }
 import type { UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
@@ -131,6 +140,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor._initializeAccessControlWithSecret(arg0);
+            return result;
+        }
+    }
+    async addAttendee(arg0: bigint, arg1: string, arg2: string): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.addAttendee(arg0, arg1, arg2);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.addAttendee(arg0, arg1, arg2);
             return result;
         }
     }
@@ -187,6 +210,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getAllEvents();
+            return result;
+        }
+    }
+    async getAttendees(arg0: bigint): Promise<Array<Attendee>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAttendees(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAttendees(arg0);
             return result;
         }
     }
@@ -257,6 +294,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async removeAttendee(arg0: bigint): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.removeAttendee(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.removeAttendee(arg0);
             return result;
         }
     }

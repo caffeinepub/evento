@@ -20,14 +20,22 @@ export const Event = IDL.Record({
   'createdBy' : IDL.Principal,
   'location' : IDL.Text,
 });
+export const Attendee = IDL.Record({
+  'id' : IDL.Nat,
+  'eventId' : IDL.Nat,
+  'name' : IDL.Text,
+  'email' : IDL.Text,
+});
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'addAttendee' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text], [IDL.Nat], []),
   'addEvent' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [IDL.Nat], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'deleteEvent' : IDL.Func([IDL.Nat], [], []),
   'getAllEvents' : IDL.Func([], [IDL.Vec(Event)], ['query']),
+  'getAttendees' : IDL.Func([IDL.Nat], [IDL.Vec(Attendee)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getEventsByCurrentUser' : IDL.Func([], [IDL.Vec(Event)], ['query']),
@@ -37,6 +45,7 @@ export const idlService = IDL.Service({
       ['query'],
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'removeAttendee' : IDL.Func([IDL.Nat], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
 });
 
@@ -55,14 +64,22 @@ export const idlFactory = ({ IDL }) => {
     'createdBy' : IDL.Principal,
     'location' : IDL.Text,
   });
+  const Attendee = IDL.Record({
+    'id' : IDL.Nat,
+    'eventId' : IDL.Nat,
+    'name' : IDL.Text,
+    'email' : IDL.Text,
+  });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'addAttendee' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text], [IDL.Nat], []),
     'addEvent' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [IDL.Nat], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'deleteEvent' : IDL.Func([IDL.Nat], [], []),
     'getAllEvents' : IDL.Func([], [IDL.Vec(Event)], ['query']),
+    'getAttendees' : IDL.Func([IDL.Nat], [IDL.Vec(Attendee)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getEventsByCurrentUser' : IDL.Func([], [IDL.Vec(Event)], ['query']),
@@ -72,6 +89,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'removeAttendee' : IDL.Func([IDL.Nat], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   });
 };

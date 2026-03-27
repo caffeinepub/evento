@@ -9,9 +9,12 @@ import {
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AddEventPage } from "./pages/AddEventPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { EventInvitePage } from "./pages/EventInvitePage";
 import { EventListPage } from "./pages/EventListPage";
+import { EventPeoplePage } from "./pages/EventPeoplePage";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
+import { RSVPPage } from "./pages/RSVPPage";
 import { RegisterPage } from "./pages/RegisterPage";
 
 const rootRoute = createRootRoute({
@@ -71,6 +74,32 @@ const eventsRoute = createRoute({
   ),
 });
 
+const eventPeopleRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/events/$eventId/people",
+  component: () => (
+    <ProtectedRoute>
+      <EventPeoplePage />
+    </ProtectedRoute>
+  ),
+});
+
+const eventInviteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/events/$eventId/invite",
+  component: () => (
+    <ProtectedRoute>
+      <EventInvitePage />
+    </ProtectedRoute>
+  ),
+});
+
+const rsvpRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/rsvp",
+  component: RSVPPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   registerRoute,
@@ -78,6 +107,9 @@ const routeTree = rootRoute.addChildren([
   dashboardRoute,
   addEventRoute,
   eventsRoute,
+  eventPeopleRoute,
+  eventInviteRoute,
+  rsvpRoute,
 ]);
 
 const router = createRouter({ routeTree });

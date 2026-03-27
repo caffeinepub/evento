@@ -1,30 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link, useNavigate } from "@tanstack/react-router";
-import {
-  CalendarDays,
-  Clock,
-  List,
-  LogOut,
-  Plus,
-  TrendingUp,
-} from "lucide-react";
+import { CalendarDays, Clock, List, LogOut, Plus, Users } from "lucide-react";
 import { motion } from "motion/react";
 import { AppHeader } from "../components/AppHeader";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
-import { useGetAllEvents, useGetCallerUserProfile } from "../hooks/useQueries";
+import {
+  useAllAttendeesCount,
+  useGetAllEvents,
+  useGetCallerUserProfile,
+} from "../hooks/useQueries";
 
 export function DashboardPage() {
   const navigate = useNavigate();
   const { identity, clear } = useInternetIdentity();
   const profileQuery = useGetCallerUserProfile();
   const eventsQuery = useGetAllEvents();
+  const attendeesCountQuery = useAllAttendeesCount();
 
   const userName = profileQuery.data?.name ?? "there";
   const eventCount = eventsQuery.data?.length ?? 0;
+  const totalAttendees = attendeesCountQuery.data ?? 0;
   const principal = identity?.getPrincipal().toString() ?? "";
   const shortPrincipal = principal
-    ? `${principal.slice(0, 5)}…${principal.slice(-3)}`
+    ? `${principal.slice(0, 5)}\u2026${principal.slice(-3)}`
     : "";
 
   function handleLogout() {
@@ -69,7 +68,7 @@ export function DashboardPage() {
           <h1 className="font-display font-bold text-3xl md:text-4xl text-foreground">
             Welcome back,{" "}
             <span className="text-primary">
-              {profileQuery.isLoading ? "…" : userName}
+              {profileQuery.isLoading ? "\u2026" : userName}
             </span>
             !
           </h1>
@@ -95,20 +94,25 @@ export function DashboardPage() {
               </span>
             </div>
             <p className="font-display font-bold text-3xl text-foreground">
-              {eventCount}
+              {eventsQuery.isLoading ? "\u2026" : eventCount}
             </p>
           </div>
+
           <div className="p-5 rounded-2xl border border-border bg-card">
             <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="w-4 h-4 text-accent" />
+              <Users
+                className="w-4 h-4"
+                style={{ color: "oklch(0.38 0.11 162)" }}
+              />
               <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-                Active
+                Attendees
               </span>
             </div>
             <p className="font-display font-bold text-3xl text-foreground">
-              {eventCount}
+              {attendeesCountQuery.isLoading ? "\u2026" : totalAttendees}
             </p>
           </div>
+
           <div className="p-5 rounded-2xl border border-border bg-card col-span-2">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-4 h-4 text-muted-foreground" />
@@ -185,7 +189,7 @@ export function DashboardPage() {
       <footer className="py-6 border-t border-border">
         <div className="container mx-auto px-6">
           <p className="text-muted-foreground text-sm text-center">
-            © {new Date().getFullYear()} EVENTO. All rights reserved.
+            \u00a9 {new Date().getFullYear()} EVENTO. All rights reserved.
           </p>
         </div>
       </footer>

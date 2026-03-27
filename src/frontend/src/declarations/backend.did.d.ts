@@ -10,6 +10,12 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface Attendee {
+  'id' : bigint,
+  'eventId' : bigint,
+  'name' : string,
+  'email' : string,
+}
 export interface Event {
   'id' : bigint,
   'title' : string,
@@ -23,15 +29,18 @@ export type UserRole = { 'admin' : null } |
   { 'guest' : null };
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'addAttendee' : ActorMethod<[bigint, string, string], bigint>,
   'addEvent' : ActorMethod<[string, string, string], bigint>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'deleteEvent' : ActorMethod<[bigint], undefined>,
   'getAllEvents' : ActorMethod<[], Array<Event>>,
+  'getAttendees' : ActorMethod<[bigint], Array<Attendee>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getEventsByCurrentUser' : ActorMethod<[], Array<Event>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'removeAttendee' : ActorMethod<[bigint], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
